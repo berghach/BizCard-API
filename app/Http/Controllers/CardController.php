@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cards;
-use App\Http\Requests\StoreCardsRequest;
-use App\Http\Requests\UpdateCardsRequest;
+use App\Models\Card;
+use App\Http\Requests\StoreCardRequest;
+use App\Http\Requests\UpdateCardRequest;
+use App\Http\Resources\CardResouce;
 
-class CardsController extends Controller
+class CardController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return Card::all();
     }
 
     /**
@@ -27,7 +28,7 @@ class CardsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCardsRequest $request)
+    public function store(StoreCardRequest $request)
     {
         //
     }
@@ -35,15 +36,15 @@ class CardsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Cards $cards)
+    public function show(Card $card)
     {
-        //
+        return new CardResouce($card);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Cards $cards)
+    public function edit(Card $card)
     {
         //
     }
@@ -51,7 +52,7 @@ class CardsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCardsRequest $request, Cards $cards)
+    public function update(UpdateCardRequest $request, Card $card)
     {
         //
     }
@@ -59,7 +60,7 @@ class CardsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cards $cards)
+    public function destroy(Card $card)
     {
         //
     }

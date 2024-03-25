@@ -2,12 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Models\Card;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Cards>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Contact>
  */
-class CardsFactory extends Factory
+class ContactFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +18,9 @@ class CardsFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'phone_number' => fake()->phoneNumber(),
+            'e_mail' => fake()->safeEmail(),
+            'cards_id' => Card::factory()
         ];
     }
 }
