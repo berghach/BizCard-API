@@ -20,7 +20,7 @@ class ContactFactory extends Factory
         return [
             'phone_number' => fake()->phoneNumber(),
             'e_mail' => fake()->safeEmail(),
-            'cards_id' => Card::factory()
+            'card_id' => Card::factory()
         ];
     }
 }

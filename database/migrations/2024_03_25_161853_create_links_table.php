@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('url');
-            $table->foreignId('contacts_id')->constrained('contacts', 'id', 'links_contact_id')->cascadeOnDelete();
+            $table->foreignId('contact_id')->constrained('contacts', 'id', 'links_contact_id')->cascadeOnDelete();
             $table->timestamps();
         });
 

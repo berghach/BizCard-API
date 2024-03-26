@@ -14,7 +14,7 @@ class CardSeeder extends Seeder
     public function run(): void
     {
         Card::factory()
-        ->count(10)
+        ->count(100)
         ->hasContact(1)->create();
     }
 }

@@ -21,6 +21,6 @@ class Card extends Model
         return $this->hasOne(Contact::class);
     }
     public function links():HasManyThrough{
-        return $this->hasManyThrough(Link::class, Contact::class, 'card', 'contact', 'id', 'id');
+        return $this->hasManyThrough(Link::class, Contact::class, 'card_id', 'contact_id', 'id', 'id');
     }
 }

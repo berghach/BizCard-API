@@ -11,7 +11,7 @@ class UpdateCardRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,24 @@ class UpdateCardRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        $method = $this->method();
+
+        if($method == 'PUT'){
+            return [
+                'company'=>['required'],
+                'card_owner'=>['required'],
+                'occupation'=>['required'],
+                'adresse'=>['required'],
+                'bio'=>['required']
+            ];
+        }else{
+            return [
+                'company'=>['sometimes','required'],
+                'card_owner'=>['sometimes','required'],
+                'occupation'=>['sometimes','required'],
+                'adresse'=>['sometimes','required'],
+                'bio'=>['sometimes','required']
+            ];
+        }
     }
 }

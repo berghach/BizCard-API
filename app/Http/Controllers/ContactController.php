@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ContactCollection;
+use App\Http\Resources\ContactResource;
 use App\Models\Contact;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
+use App\Models\Card;
 
 class ContactController extends Controller
 {
@@ -13,7 +16,7 @@ class ContactController extends Controller
      */
     public function index()
     {
-        //
+        return new ContactCollection(Contact::paginate());
     }
 
     /**
@@ -27,7 +30,7 @@ class ContactController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreContactRequest $request)
+    public function store(StoreContactRequest $request, Card $card)
     {
         //
     }
@@ -37,7 +40,7 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
-        //
+        return new ContactResource($contact);
     }
 
     /**
@@ -61,6 +64,6 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
-        //
+        $contact->delete();
     }
 }

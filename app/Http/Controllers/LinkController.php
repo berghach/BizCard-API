@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\LinkCollection;
+use App\Http\Resources\linkResource;
 use App\Models\Link;
 use App\Http\Requests\StoreLinkRequest;
 use App\Http\Requests\UpdateLinkRequest;
@@ -13,7 +15,7 @@ class LinkController extends Controller
      */
     public function index()
     {
-        //
+        return new LinkCollection(Link::paginate());
     }
 
     /**
@@ -37,7 +39,7 @@ class LinkController extends Controller
      */
     public function show(Link $link)
     {
-        //
+        return new linkResource($link);
     }
 
     /**

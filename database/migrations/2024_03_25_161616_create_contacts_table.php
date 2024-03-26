@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('phone_number');
             $table->string('e_mail');
-            $table->foreignId('cards_id')->unique()->constrained('cards', 'id', 'contacts_card_id')->cascadeOnDelete();
+            $table->foreignId('card_id')->unique()->constrained('cards', 'id', 'contacts_card_id')->cascadeOnDelete();
             $table->timestamps();
         });
     }

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Card;
+use App\Models\Contact;
+use Illuminate\Http\Request;
+use App\Http\Resources\CardResource;
+use App\Http\Resources\CardCollection;
 use App\Http\Requests\StoreCardRequest;
 use App\Http\Requests\UpdateCardRequest;
-use App\Http\Resources\CardResouce;
 
 class CardController extends Controller
 {
@@ -14,7 +17,7 @@ class CardController extends Controller
      */
     public function index()
     {
-        return Card::all();
+        return new CardCollection(Card::paginate());
     }
 
     /**
@@ -28,9 +31,42 @@ class CardController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCardRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'company' => 'required',
+            'card_owner' => 'required',
+            'occupation' => 'required',
+            'adresse' => 'required',
+            'bio' => 'required',
+            'phone_number' => 'nullable',
+            'e_mail' => 'nullable',
+            'links' => 'nullable|array',
+            'links.*.name' => 'nullable|required_with:links',
+            'links.*.url' => 'nullable|required_with:links|url',
+        ]);
+        $card = Card::create([
+            'company' => $validatedData['company'],
+            'card_owner' => $validatedData['card_owner'],
+            'occupation' => $validatedData['occupation'],
+            'adresse' => $validatedData['adresse'],
+            'bio' => $validatedData['bio'],
+        ]);
+        if(isset($validatedData['phone_number'], $validatedData['e_mail'])){
+            $contact = $card->contact()->create([
+                'phone_number' => $validatedData['phone_number'],
+                'e_mail' => $validatedData['e_mail'],
+            ]);
+        }
+        if(isset($validatedData['links'])){
+            foreach ($validatedData['links'] as $linkData) {
+                $contact->links()->create([
+                    'name' => $linkData['name'],
+                    'url' => $linkData['url'],
+                ]);
+            }
+        }
+        return new CardResource($card->refresh());
     }
 
     /**
@@ -38,7 +74,7 @@ class CardController extends Controller
      */
     public function show(Card $card)
     {
-        return new CardResouce($card);
+        return new CardResource($card);
     }
 
     /**
@@ -54,7 +90,7 @@ class CardController extends Controller
      */
     public function update(UpdateCardRequest $request, Card $card)
     {
-        //
+        $card->update($request->all());
     }
 
     /**
@@ -62,6 +98,6 @@ class CardController extends Controller
      */
     public function destroy(Card $card)
     {
-        //
+        $card->delete();
     }
 }

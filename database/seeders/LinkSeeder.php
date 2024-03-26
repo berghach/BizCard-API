@@ -19,7 +19,7 @@ class LinkSeeder extends Seeder
         $contacts->each(function ($contact) {
             Link::factory()
                 ->count(3) 
-                ->create(['contacts_id' => $contact->id]);
+                ->create(['contact_id' => $contact->id]);
         });
     }
 }
