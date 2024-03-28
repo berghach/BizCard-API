@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +22,8 @@ class CardFactory extends Factory
             'card_owner' => fake()->name(),
             'occupation' => fake()->jobTitle(),
             'adresse' => fake()->streetAddress(),
-            'bio' =>fake()->paragraph()
+            'bio' =>fake()->paragraph(),
+            'user_id' => User::factory()
         ];
     }
 }

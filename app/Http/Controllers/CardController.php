@@ -9,6 +9,8 @@ use App\Http\Resources\CardResource;
 use App\Http\Resources\CardCollection;
 use App\Http\Requests\StoreCardRequest;
 use App\Http\Requests\UpdateCardRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class CardController extends Controller
 {
@@ -17,7 +19,15 @@ class CardController extends Controller
      */
     public function index()
     {
-        return new CardCollection(Card::paginate());
+        if (Gate::allows('viewAny', Card::class)) {
+            return new CardCollection(Card::paginate());
+        }else{
+            $cards = Card::all();
+            $filteredCards = $cards->filter(function ($card) {
+                return Gate::allows('view', $card);
+            });
+            return new CardCollection($filteredCards);
+        }
     }
 
     /**
@@ -31,42 +41,32 @@ class CardController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCardRequest $request)
     {
-        $validatedData = $request->validate([
-            'company' => 'required',
-            'card_owner' => 'required',
-            'occupation' => 'required',
-            'adresse' => 'required',
-            'bio' => 'required',
-            'phone_number' => 'nullable',
-            'e_mail' => 'nullable',
-            'links' => 'nullable|array',
-            'links.*.name' => 'nullable|required_with:links',
-            'links.*.url' => 'nullable|required_with:links|url',
-        ]);
         $card = Card::create([
-            'company' => $validatedData['company'],
-            'card_owner' => $validatedData['card_owner'],
-            'occupation' => $validatedData['occupation'],
-            'adresse' => $validatedData['adresse'],
-            'bio' => $validatedData['bio'],
+            'company' => $request['company'],
+            'card_owner' => $request['card_owner'],
+            'occupation' => $request['occupation'],
+            'adresse' => $request['adresse'],
+            'bio' => $request['bio'],
+            'user_id' => Auth::user()->id
         ]);
-        if(isset($validatedData['phone_number'], $validatedData['e_mail'])){
+        if(!empty($request['contact'])){
             $contact = $card->contact()->create([
-                'phone_number' => $validatedData['phone_number'],
-                'e_mail' => $validatedData['e_mail'],
+                'phone_number' => $request['contact']['phone_number'] ?? null,
+                'e_mail' => $request['contact']['e_mail'] ?? null,
             ]);
-        }
-        if(isset($validatedData['links'])){
-            foreach ($validatedData['links'] as $linkData) {
-                $contact->links()->create([
-                    'name' => $linkData['name'],
-                    'url' => $linkData['url'],
-                ]);
+            if(!empty($request['contact']['links'])){
+                foreach ($request['contact']['links'] as $linkData) {
+                    $contact->links()->create([
+                        'name' => $linkData['name'],
+                        'url' => $linkData['url'],
+                    ]);
+                }
             }
         }
         return new CardResource($card->refresh());
+        // return $request;
     }
 
     /**
@@ -74,7 +74,16 @@ class CardController extends Controller
      */
     public function show(Card $card)
     {
-        return new CardResource($card);
+        if (Gate::allows('viewAny', Card::class)) {
+            return new CardResource($card);
+        }else{
+            $response = Gate::inspect('view', $card);
+            if($response->allowed()){
+                return new CardResource($card);
+            }else{
+                return [$response->message()];
+            }
+        }
     }
 
     /**
@@ -90,7 +99,26 @@ class CardController extends Controller
      */
     public function update(UpdateCardRequest $request, Card $card)
     {
-        $card->update($request->all());
+        $response = Gate::inspect('update', $card);
+ 
+        if ($response->allowed()) {
+            $card->update([
+                'company' => $request['company'],
+                'card_owner' => $request['card_owner'],
+                'occupation' => $request['occupation'],
+                'adresse' => $request['adresse'],
+                'bio' => $request['bio'],
+            ]);
+            $card->company = $request['company'];
+            $card->card_owner = $request['card_owner'];
+            $card->occupation = $request['occupation'];
+            $card->adresse = $request['adresse'];
+            $card->bio = $request['bio'];
+            
+            
+        } else {
+            return [$response->message()];
+        }
     }
 
     /**
@@ -98,6 +126,11 @@ class CardController extends Controller
      */
     public function destroy(Card $card)
     {
-        $card->delete();
+        $response = Gate::inspect('delete', $card);
+        if ($response->allowed()) {
+            $card->delete();
+        } else {
+            return [$response->message()];
+        }
     }
 }

@@ -29,15 +29,27 @@ class UpdateCardRequest extends FormRequest
                 'card_owner'=>['required'],
                 'occupation'=>['required'],
                 'adresse'=>['required'],
-                'bio'=>['required']
+                'bio'=>['required'],
+                'contact' => ['nullable','array'],
+                'contact.phone_number' => ['nullable'],
+                'contact.e_mail' => ['nullable','email'], 
+                'contact.links' => ['nullable','array'],
+                'contact.links.*.name' => ['required_with:contact.links'],
+                'contact.links.*.url' => ['required_with:contact.links','url'],
             ];
         }else{
             return [
-                'company'=>['sometimes','required'],
-                'card_owner'=>['sometimes','required'],
-                'occupation'=>['sometimes','required'],
-                'adresse'=>['sometimes','required'],
-                'bio'=>['sometimes','required']
+                'company'=>['sometime','required'],
+                'card_owner'=>['sometime','required'],
+                'occupation'=>['sometime','required'],
+                'adresse'=>['sometime','required'],
+                'bio'=>['sometime','required'],
+                'contact' => ['nullable','array'],
+                'contact.phone_number' => ['nullable'],
+                'contact.e_mail' => ['nullable','email'], 
+                'contact.links' => ['nullable','array'],
+                'contact.links.*.name' => ['required_with:contact.links'],
+                'contact.links.*.url' => ['required_with:contact.links','url'],
             ];
         }
     }

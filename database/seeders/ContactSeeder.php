@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Card;
+use App\Models\Contact;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class ContactSeeder extends Seeder
 {
@@ -12,6 +14,10 @@ class ContactSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $cards = Card::all();
+        $cards->each(function($card){
+            Contact::factory(1)
+                    ->create(['card_id' => $card->id]);
+        });
     }
 }

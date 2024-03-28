@@ -33,5 +33,5 @@ Route::post('/sanctum/token', function (Request $request) {
 
 
 Route::apiResource('cards', CardController::class)->middleware('auth:sanctum');
-Route::apiResource('contacts', ContactController::class);
-Route::apiResource('links', LinkController::class);
+Route::apiResource('contacts', ContactController::class)->middleware('auth:sanctum');
+Route::apiResource('links', LinkController::class)->middleware('auth:sanctum');
