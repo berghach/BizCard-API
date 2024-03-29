@@ -102,20 +102,7 @@ class CardController extends Controller
         $response = Gate::inspect('update', $card);
  
         if ($response->allowed()) {
-            $card->update([
-                'company' => $request['company'],
-                'card_owner' => $request['card_owner'],
-                'occupation' => $request['occupation'],
-                'adresse' => $request['adresse'],
-                'bio' => $request['bio'],
-            ]);
-            $card->company = $request['company'];
-            $card->card_owner = $request['card_owner'];
-            $card->occupation = $request['occupation'];
-            $card->adresse = $request['adresse'];
-            $card->bio = $request['bio'];
-            
-            
+            $card->update($request->all());
         } else {
             return [$response->message()];
         }
