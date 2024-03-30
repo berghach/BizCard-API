@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\LinkCollection;
-use App\Http\Resources\linkResource;
 use App\Models\Link;
+use App\Http\Resources\linkResource;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Resources\LinkCollection;
 use App\Http\Requests\StoreLinkRequest;
 use App\Http\Requests\UpdateLinkRequest;
 
@@ -15,7 +16,15 @@ class LinkController extends Controller
      */
     public function index()
     {
-        return new LinkCollection(Link::paginate());
+        if (Gate::allows('viewAny', Link::class)) {
+            return new LinkCollection(Link::paginate());
+        }else{
+            $links = Link::all();
+            $filteredLinks = $links->filter(function ($link) {
+                return Gate::allows('view', $link);
+            });
+            return new LinkCollection($filteredLinks);
+        }
     }
 
     /**

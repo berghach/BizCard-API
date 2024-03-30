@@ -27,12 +27,11 @@ class StoreCardRequest extends FormRequest
             'occupation'=>['required'],
             'adresse'=>['required'],
             'bio'=>['required'],
-            'contact' => ['nullable','array'],
-            'contact.phone_number' => ['nullable'],
-            'contact.e_mail' => ['nullable','email'], 
-            'contact.links' => ['nullable','array'],
-            'contact.links.*.name' => ['required_with:contact.links'],
-            'contact.links.*.url' => ['required_with:contact.links','url'],
+            'phone_number' => ['required'],
+            'e_mail' => ['required','email'], 
+            'links' => ['nullable','array'],
+            'links.*.name' => ['required_with:links'],
+            'links.*.url' => ['required_with:links','url'],
         ];
     }
 }

@@ -5,9 +5,10 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class User extends Authenticatable
 {
@@ -48,5 +49,8 @@ class User extends Authenticatable
     }
     public function cards():HasMany{
         return $this->hasMany(Card::class);
+    }
+    public function links():HasManyThrough{
+        return $this->hasManyThrough(Link::class, Card::class, 'user_id', 'card_id', 'id', 'id');
     }
 }

@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Link;
-use App\Models\Contact;
+use App\Models\card;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -14,12 +14,12 @@ class LinkSeeder extends Seeder
      */
     public function run(): void
     {
-        $contacts = Contact::all();
+        $cards = card::all();
 
-        $contacts->each(function ($contact) {
+        $cards->each(function ($card) {
             Link::factory()
                 ->count(3) 
-                ->create(['contact_id' => $contact->id]);
+                ->create(['card_id' => $card->id]);
         });
     }
 }

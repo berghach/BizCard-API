@@ -49,20 +49,16 @@ class CardController extends Controller
             'occupation' => $request['occupation'],
             'adresse' => $request['adresse'],
             'bio' => $request['bio'],
+            'phone_number' => $request['phone_number'],
+            'e_mail' => $request['e_mail'], 
             'user_id' => Auth::user()->id
         ]);
-        if(!empty($request['contact'])){
-            $contact = $card->contact()->create([
-                'phone_number' => $request['contact']['phone_number'] ?? null,
-                'e_mail' => $request['contact']['e_mail'] ?? null,
-            ]);
-            if(!empty($request['contact']['links'])){
-                foreach ($request['contact']['links'] as $linkData) {
-                    $contact->links()->create([
-                        'name' => $linkData['name'],
-                        'url' => $linkData['url'],
-                    ]);
-                }
+        if(!empty($request['links'])){
+            foreach ($request['links'] as $linkData) {
+                $card->links()->create([
+                    'name' => $linkData['name'],
+                    'url' => $linkData['url'],
+                ]);
             }
         }
         return new CardResource($card->refresh());

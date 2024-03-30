@@ -22,8 +22,8 @@ class UpdateLinkRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=>['required'],
-            'url'=>['required']
+            'name'=>['sometime','required'],
+            'url'=>['sometime','required']
         ];
     }
 }

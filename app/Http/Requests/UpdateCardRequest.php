@@ -30,6 +30,11 @@ class UpdateCardRequest extends FormRequest
                 'occupation'=>['required'],
                 'adresse'=>['required'],
                 'bio'=>['required'],
+                'phone_number' => ['required'],
+                'e_mail' => ['required','email'], 
+                // 'links' => ['nullable','array'],
+                // 'links.*.name' => ['required_with:links'],
+                // 'links.*.url' => ['required_with:links','url'],
             ];
         }else{
             return [
@@ -37,7 +42,10 @@ class UpdateCardRequest extends FormRequest
                 'card_owner'=>['sometime','required'],
                 'occupation'=>['sometime','required'],
                 'adresse'=>['sometime','required'],
-                'bio'=>['sometime','required'],            ];
+                'bio'=>['sometime','required'],
+                'phone_number' => ['sometime','required'],
+                'e_mail' => ['sometime','required','email'],
+            ];
         }
     }
 }

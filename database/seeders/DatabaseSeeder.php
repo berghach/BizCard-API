@@ -19,7 +19,6 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin User',
             'email' => 'admin@example.com',
         ]);
-        $this->call(ContactSeeder::class);
         $this->call(LinkSeeder::class);
 
     }

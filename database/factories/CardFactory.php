@@ -23,6 +23,8 @@ class CardFactory extends Factory
             'occupation' => fake()->jobTitle(),
             'adresse' => fake()->streetAddress(),
             'bio' =>fake()->paragraph(),
+            'phone_number' => fake()->phoneNumber(),
+            'e_mail' => fake()->safeEmail(),
             'user_id' => User::factory()
         ];
     }

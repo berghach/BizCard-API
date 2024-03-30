@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Card extends Model
@@ -17,15 +18,14 @@ class Card extends Model
         'occupation',
         'adresse',
         'bio',
+        'phone_number',
+        'e_mail',
         'user_id'
     ];
     public function user():BelongsTo{
         return $this->belongsTo(User::class);
     }
-    public function contact():HasOne{
-        return $this->hasOne(Contact::class);
-    }
-    public function links():HasManyThrough{
-        return $this->hasManyThrough(Link::class, Contact::class, 'card_id', 'contact_id', 'id', 'id');
+    public function links():HasMany{
+        return $this->hasMany(Link::class);
     }
 }

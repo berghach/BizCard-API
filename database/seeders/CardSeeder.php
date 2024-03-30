@@ -15,6 +15,6 @@ class CardSeeder extends Seeder
     {
         Card::factory()
         ->count(100)
-        ->hasContact(1)->create();
+        ->hasLink(1)->create();
     }
 }

@@ -14,7 +14,7 @@ class Link extends Model
         'url'
     ];
 
-    public function contact():BelongsTo{
-        return $this->belongsTo(Contact::class);
+    public function card():BelongsTo{
+        return $this->belongsTo(Card::class);
     }
 }

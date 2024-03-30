@@ -15,14 +15,13 @@ class CardResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'Id' => $this->id,
+            'ID' => $this->id,
             'Company' => $this->company,
             'Owner' => $this->card_owner,
-            'Work as' => $this->occupation,
+            'WorkAs' => $this->occupation,
             'Adresse' => $this->adresse,
-            // 'Phone number' => $this->contact->phone_number,
-            // 'E-mail' => $this->contact->e_mail,
-            'Contacts' => new ContactResource($this->contact),
+            'Tel' => $this->phone_number,
+            'E-mail' => $this->e_mail,
             'Links' => new LinkCollection($this->links),
             'About' => $this->bio
         ];

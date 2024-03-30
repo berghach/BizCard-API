@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('occupation');
             $table->string('adresse');
             $table->text('bio');
+            $table->string('phone_number');
+            $table->string('e_mail');
             $table->foreignId('user_id')->constrained('users', 'id', 'card_user_id')->cascadeOnDelete();
             $table->timestamps();
         });

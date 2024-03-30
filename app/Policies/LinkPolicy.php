@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Card;
 use App\Models\Link;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -13,15 +14,17 @@ class LinkPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return $user->email === 'admin@example.com';
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Link $link): bool
+    public function view(User $user, Card $card, Link $link): Response
     {
-        //
+        return $user->id === $card->user_id && $card->id === $link->card_id
+                ? Response::allow()
+                : Response::deny('You do not own this card.');
     }
 
     /**
@@ -35,17 +38,21 @@ class LinkPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Link $link): bool
+    public function update(User $user, Card $card, Link $link): Response
     {
-        //
+        return $user->id === $card->user_id && $card->id === $link->card_id
+                ? Response::allow()
+                : Response::deny('You do not own this card.');  
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Link $link): bool
+    public function delete(User $user, Card $card, Link $link): Response
     {
-        //
+        return $user->id === $card->user_id && $card->id === $link->card_id
+                ? Response::allow()
+                : Response::deny('You do not own this card.');
     }
 
     /**
