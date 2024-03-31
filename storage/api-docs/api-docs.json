@@ -1,0 +1,375 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "BizCard-API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/cards": {
+            "get": {
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Get list of cards",
+                "description": "Returns a list of cards that the authenticated user has permission to view.",
+                "operationId": "getCardList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Card"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - The user does not have permission to view any cards."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Create a new card",
+                "description": "Creates a new card with the provided data.",
+                "operationId": "storeCard",
+                "requestBody": {
+                    "description": "Card data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "company",
+                                    "card_owner",
+                                    "occupation",
+                                    "adresse",
+                                    "bio",
+                                    "phone_number",
+                                    "e_mail"
+                                ],
+                                "properties": {
+                                    "company": {
+                                        "type": "string"
+                                    },
+                                    "card_owner": {
+                                        "type": "string"
+                                    },
+                                    "occupation": {
+                                        "type": "string"
+                                    },
+                                    "adresse": {
+                                        "type": "string"
+                                    },
+                                    "bio": {
+                                        "type": "string"
+                                    },
+                                    "phone_number": {
+                                        "type": "string"
+                                    },
+                                    "e_mail": {
+                                        "type": "string"
+                                    },
+                                    "links": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Card created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Card"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error - One or more fields are invalid"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/cards/{cardId}": {
+            "get": {
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Get a card by ID",
+                "description": "Returns the details of a card by its ID.",
+                "operationId": "getCard",
+                "parameters": [
+                    {
+                        "name": "cardId",
+                        "in": "path",
+                        "description": "ID of the card",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Card"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - The user does not have permission to view the card."
+                    },
+                    "404": {
+                        "description": "Not Found - The card with the specified ID was not found."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Update a card by ID",
+                "description": "Updates the details of a card by its ID.",
+                "operationId": "updateCard",
+                "parameters": [
+                    {
+                        "name": "cardId",
+                        "in": "path",
+                        "description": "ID of the card",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Updated card data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "company",
+                                    "card_owner",
+                                    "occupation",
+                                    "adresse",
+                                    "bio",
+                                    "phone_number",
+                                    "e_mail"
+                                ],
+                                "properties": {
+                                    "company": {
+                                        "type": "string"
+                                    },
+                                    "card_owner": {
+                                        "type": "string"
+                                    },
+                                    "occupation": {
+                                        "type": "string"
+                                    },
+                                    "adresse": {
+                                        "type": "string"
+                                    },
+                                    "bio": {
+                                        "type": "string"
+                                    },
+                                    "phone_number": {
+                                        "type": "string"
+                                    },
+                                    "e_mail": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Card updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Card"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error - One or more fields are invalid"
+                    },
+                    "403": {
+                        "description": "Forbidden - The user does not have permission to update the card."
+                    },
+                    "404": {
+                        "description": "Not Found - The card with the specified ID was not found."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Delete a card by ID",
+                "description": "Deletes a card by its ID.",
+                "operationId": "deleteCard",
+                "parameters": [
+                    {
+                        "name": "cardId",
+                        "in": "path",
+                        "description": "ID of the card",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Card deleted successfully"
+                    },
+                    "403": {
+                        "description": "Forbidden - The user does not have permission to delete the card."
+                    },
+                    "404": {
+                        "description": "Not Found - The card with the specified ID was not found."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Card": {
+                "title": "Card",
+                "description": "Card model",
+                "properties": {
+                    "id": {
+                        "description": "ID of the card",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "company": {
+                        "description": "Company of the card",
+                        "type": "string"
+                    },
+                    "card_owner": {
+                        "description": "Owner of the card",
+                        "type": "string"
+                    },
+                    "occupation": {
+                        "description": "Occupation of the card owner",
+                        "type": "string"
+                    },
+                    "adresse": {
+                        "description": "Address of the card owner",
+                        "type": "string"
+                    },
+                    "bio": {
+                        "description": "Bio information of the card owner",
+                        "type": "string"
+                    },
+                    "phone_number": {
+                        "description": "Phone number of the card owner",
+                        "type": "string"
+                    },
+                    "e_mail": {
+                        "description": "Email of the card owner",
+                        "type": "string",
+                        "format": "email"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "Authorization",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    }
+}

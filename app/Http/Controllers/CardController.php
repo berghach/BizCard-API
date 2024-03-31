@@ -11,12 +11,60 @@ use App\Http\Requests\StoreCardRequest;
 use App\Http\Requests\UpdateCardRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use OpenApi\Annotations as OA;
+/**
+ * @OA\Info(
+ *   title="BizCard-API",
+ *   version="1.0.0",
+ * )
+ * @OA\SecurityScheme(
+ *   securityScheme="bearerAuth",
+ *   in="header",
+ *   name="Authorization",
+ *   type="http",
+ *   scheme="bearer",
+ *   bearerFormat="JWT",
+ * )
+ * @OA\Schema(
+ *   schema="Card",
+ *   title="Card",
+ *   description="Card model",
+ *   @OA\Property(property="id", type="integer", format="int64", description="ID of the card"),
+ *   @OA\Property(property="company", type="string", description="Company of the card"),
+ *   @OA\Property(property="card_owner", type="string", description="Owner of the card"),
+ *   @OA\Property(property="occupation", type="string", description="Occupation of the card owner"),
+ *   @OA\Property(property="adresse", type="string", description="Address of the card owner"),
+ *   @OA\Property(property="bio", type="string", description="Bio information of the card owner"),
+ *   @OA\Property(property="phone_number", type="string", description="Phone number of the card owner"),
+ *   @OA\Property(property="e_mail", type="string", format="email", description="Email of the card owner"),
+ * )
+ */
 
 class CardController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
+     * @OA\Get(
+     *      path="/cards",
+     *      operationId="getCardList",
+     *      tags={"Cards"},
+     *      summary="Get list of cards",
+     *      description="Returns a list of cards that the authenticated user has permission to view.",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              type="array",
+     *              @OA\Items(ref="#/components/schemas/Card")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden - The user does not have permission to view any cards."
+     *      )
+     * )
+    */
+
     public function index()
     {
         if (Gate::allows('viewAny', Card::class)) {
@@ -39,8 +87,49 @@ class CardController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
+ * @OA\Post(
+ *      path="/cards",
+ *      operationId="storeCard",
+ *      tags={"Cards"},
+ *      summary="Create a new card",
+ *      description="Creates a new card with the provided data.",
+ *      security={{"bearerAuth":{}}},
+ *      @OA\RequestBody(
+ *          required=true,
+ *          description="Card data",
+ *          @OA\JsonContent(
+ *              required={"company", "card_owner", "occupation", "adresse", "bio", "phone_number", "e_mail"},
+ *              @OA\Property(property="company", type="string"),
+ *              @OA\Property(property="card_owner", type="string"),
+ *              @OA\Property(property="occupation", type="string"),
+ *              @OA\Property(property="adresse", type="string"),
+ *              @OA\Property(property="bio", type="string"),
+ *              @OA\Property(property="phone_number", type="string"),
+ *              @OA\Property(property="e_mail", type="string"),
+ *              @OA\Property(property="links", type="array", @OA\Items(
+ *                  @OA\Property(property="name", type="string"),
+ *                  @OA\Property(property="url", type="string"),
+ *              )),
+ *          )
+ *      ),
+ *      @OA\Response(
+ *          response=201,
+ *          description="Card created successfully",
+ *          @OA\JsonContent(
+ *              @OA\Property(property="data", ref="#/components/schemas/Card")
+ *          )
+ *      ),
+ *      @OA\Response(
+ *          response=422,
+ *          description="Validation error - One or more fields are invalid"
+ *      ),
+ *      @OA\Response(
+ *          response=401,
+ *          description="Unauthorized"
+ *      )
+ * )
+ */
+
     public function store(StoreCardRequest $request)
     {
         $card = Card::create([
@@ -62,12 +151,45 @@ class CardController extends Controller
             }
         }
         return new CardResource($card->refresh());
-        // return $request;
     }
-
-    /**
-     * Display the specified resource.
-     */
+/**
+ * @OA\Get(
+ *      path="/cards/{cardId}",
+ *      operationId="getCard",
+ *      tags={"Cards"},
+ *      summary="Get a card by ID",
+ *      description="Returns the details of a card by its ID.",
+ *      security={{"bearerAuth":{}}},
+ *      @OA\Parameter(
+ *          name="cardId",
+ *          in="path",
+ *          required=true,
+ *          description="ID of the card",
+ *          @OA\Schema(
+ *              type="integer"
+ *          )
+ *      ),
+ *      @OA\Response(
+ *          response=200,
+ *          description="Successful operation",
+ *          @OA\JsonContent(
+ *              @OA\Property(property="data", ref="#/components/schemas/Card")
+ *          )
+ *      ),
+ *      @OA\Response(
+ *          response=403,
+ *          description="Forbidden - The user does not have permission to view the card."
+ *      ),
+ *      @OA\Response(
+ *          response=404,
+ *          description="Not Found - The card with the specified ID was not found."
+ *      ),
+ *      @OA\Response(
+ *          response=401,
+ *          description="Unauthorized"
+ *      )
+ * )
+ */
     public function show(Card $card)
     {
         if (Gate::allows('viewAny', Card::class)) {
@@ -90,9 +212,62 @@ class CardController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+ /**
+ * @OA\Put(
+ *      path="/cards/{cardId}",
+ *      operationId="updateCard",
+ *      tags={"Cards"},
+ *      summary="Update a card by ID",
+ *      description="Updates the details of a card by its ID.",
+ *      security={{"bearerAuth":{}}},
+ *      @OA\Parameter(
+ *          name="cardId",
+ *          in="path",
+ *          required=true,
+ *          description="ID of the card",
+ *          @OA\Schema(
+ *              type="integer"
+ *          )
+ *      ),
+ *      @OA\RequestBody(
+ *          required=true,
+ *          description="Updated card data",
+ *          @OA\JsonContent(
+ *              required={"company", "card_owner", "occupation", "adresse", "bio", "phone_number", "e_mail"},
+ *              @OA\Property(property="company", type="string"),
+ *              @OA\Property(property="card_owner", type="string"),
+ *              @OA\Property(property="occupation", type="string"),
+ *              @OA\Property(property="adresse", type="string"),
+ *              @OA\Property(property="bio", type="string"),
+ *              @OA\Property(property="phone_number", type="string"),
+ *              @OA\Property(property="e_mail", type="string"),
+ *          )
+ *      ),
+ *      @OA\Response(
+ *          response=200,
+ *          description="Card updated successfully",
+ *          @OA\JsonContent(
+ *              @OA\Property(property="data", ref="#/components/schemas/Card")
+ *          )
+ *      ),
+ *      @OA\Response(
+ *          response=422,
+ *          description="Validation error - One or more fields are invalid"
+ *      ),
+ *      @OA\Response(
+ *          response=403,
+ *          description="Forbidden - The user does not have permission to update the card."
+ *      ),
+ *      @OA\Response(
+ *          response=404,
+ *          description="Not Found - The card with the specified ID was not found."
+ *      ),
+ *      @OA\Response(
+ *          response=401,
+ *          description="Unauthorized"
+ *      )
+ * )
+*/
     public function update(UpdateCardRequest $request, Card $card)
     {
         $response = Gate::inspect('update', $card);
@@ -105,8 +280,41 @@ class CardController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     */
+     * @OA\Delete(
+     *      path="/cards/{cardId}",
+     *      operationId="deleteCard",
+     *      tags={"Cards"},
+     *      summary="Delete a card by ID",
+     *      description="Deletes a card by its ID.",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *          name="cardId",
+     *          in="path",
+     *          required=true,
+     *          description="ID of the card",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=204,
+     *          description="Card deleted successfully"
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden - The user does not have permission to delete the card."
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Not Found - The card with the specified ID was not found."
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthorized"
+     *      )
+     * )
+    */
+
     public function destroy(Card $card)
     {
         $response = Gate::inspect('delete', $card);

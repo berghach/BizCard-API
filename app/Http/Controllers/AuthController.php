@@ -17,7 +17,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
         if(!empty($user)){
             if (Hash::check($request->password, $user->password)) {
-                return $user->createToken('token', ['create', 'update', 'delete'])->plainTextToken;
+                return $user->createToken($user->name.'token', ['create', 'update', 'delete'])->plainTextToken;
             }else{
                     return ['The password is incorrect.'];
             }

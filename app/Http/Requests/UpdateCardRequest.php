@@ -31,10 +31,7 @@ class UpdateCardRequest extends FormRequest
                 'adresse'=>['required'],
                 'bio'=>['required'],
                 'phone_number' => ['required'],
-                'e_mail' => ['required','email'], 
-                // 'links' => ['nullable','array'],
-                // 'links.*.name' => ['required_with:links'],
-                // 'links.*.url' => ['required_with:links','url'],
+                'e_mail' => ['required','email'],
             ];
         }else{
             return [
