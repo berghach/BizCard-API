@@ -47,6 +47,10 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
                                         "access_token": {
                                             "type": "string"
                                         },

@@ -274,6 +274,7 @@ class CardController extends Controller
  
         if ($response->allowed()) {
             $card->update($request->all());
+            return ["Card updated", $request->method()];
         } else {
             return [$response->message()];
         }

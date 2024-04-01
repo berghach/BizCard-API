@@ -30,6 +30,7 @@ class AuthController extends Controller
      *          response=200,
      *          description="Successful operation",
      *          @OA\JsonContent(
+     *              @OA\Property(property="status", type="integer", example=200),
      *              @OA\Property(property="access_token", type="string"),
      *              @OA\Property(property="token_type", type="string", example="Bearer"),
      *          )
@@ -53,7 +54,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
         if(!empty($user)){
             if (Hash::check($request->password, $user->password)) {
-                return $user->createToken($user->name.'token', ['create', 'update', 'delete'])->plainTextToken;
+                return response($user->createToken($user->name.'token', ['create', 'update', 'delete'])->plainTextToken);
             }else{
                     return ['The password is incorrect.'];
             }
