@@ -35,13 +35,13 @@ class UpdateCardRequest extends FormRequest
             ];
         }else{
             return [
-                'company'=>['sometime','required'],
-                'card_owner'=>['sometime','required'],
-                'occupation'=>['sometime','required'],
-                'adresse'=>['sometime','required'],
-                'bio'=>['sometime','required'],
-                'phone_number' => ['sometime','required'],
-                'e_mail' => ['sometime','required','email'],
+                'company'=>['sometimes','required'],
+                'card_owner'=>['sometimes','required'],
+                'occupation'=>['sometimes','required'],
+                'adresse'=>['sometimes','required'],
+                'bio'=>['sometimes','required'],
+                'phone_number' => ['sometimes','required'],
+                'e_mail' => ['sometimes','required','email'],
             ];
         }
     }

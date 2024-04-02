@@ -273,8 +273,13 @@ class CardController extends Controller
         $response = Gate::inspect('update', $card);
  
         if ($response->allowed()) {
-            $card->update($request->all());
-            return ["Card updated", $request->method()];
+            if($request->method()==="PUT"){
+                $card->update($request->all());
+                return ["Card updated", new CardResource($card), $request->method()];
+            }else{
+                $card->update($request->all());
+                return ["Card updated", new CardResource($card), $request->method()];
+            }
         } else {
             return [$response->message()];
         }
