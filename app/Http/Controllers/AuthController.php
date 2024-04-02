@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use OpenApi\Annotations as OA;
 
@@ -59,7 +60,7 @@ class AuthController extends Controller
                     return ['The password is incorrect.'];
             }
         }else{
-            return ['User not found', 'Sign up in /api/sanctum/signup'];
+            return ['User not found', 'Sign up in /api/signup'];
         }
     }
     /**
@@ -103,5 +104,10 @@ class AuthController extends Controller
 
         $user = User::create($validData);
         return $user->createToken($user->name.'token', ['create', 'update', 'delete'])->plainTextToken;
+    }
+    public function logout(Request $request){
+        $request->user()->tokens()->delete();
+
+        return response()->json(['message' => 'Logged out successfully']);
     }
 }
