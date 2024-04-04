@@ -17,7 +17,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 Route::apiResource('cards', CardController::class)->middleware('auth:sanctum');
 Route::apiResource('links', LinkController::class)->middleware('auth:sanctum');
-// Route::apiResource('links', LinkController::class)->middleware('auth:sanctum');
+
 Route::get('/cards-number', function(Request $request){
     $user = $request->user();
     $cards = Card::where('user_id', $user->id)->get();
