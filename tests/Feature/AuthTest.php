@@ -22,7 +22,7 @@ class AuthTest extends TestCase
     public function test_token()
     {
         $user = User::inRandomOrder()->first();
-        $response = $this->postJson('/api/sanctum/token', [
+        $response = $this->postJson('/api/token', [
             'email' => $user->email,
             'password' => $user->password,
         ]);
@@ -39,7 +39,7 @@ class AuthTest extends TestCase
             'password_confirmation' => 'password123',
         ];
 
-        $response = $this->postJson('/api/sanctum/signup', $userData);
+        $response = $this->postJson('/api/signup', $userData);
 
         $response->assertStatus(200);
     }
