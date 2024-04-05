@@ -15,7 +15,7 @@ class CardResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'ID' => $this->id,
+            'Id' => $this->id,
             'Company' => $this->company,
             'Owner' => $this->card_owner,
             'WorkAs' => $this->occupation,
