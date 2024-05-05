@@ -7,6 +7,8 @@ use App\Http\Controllers\CardController;
 use App\Http\Controllers\LinkController;
 use App\Models\Card;
 
+// edit to merge
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
