@@ -8,6 +8,7 @@ use App\Http\Controllers\LinkController;
 use App\Models\Card;
 
 // edit to merge
+// edit to merge 2
 
 Route::get('/user', function (Request $request) {
     return $request->user();
